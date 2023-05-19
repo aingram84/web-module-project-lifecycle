@@ -22,14 +22,14 @@ export default class App extends React.Component {
     //   completed: false
     // }
 
-    console.log('heresssssss Loggy');
+    console.log('LOG 1');
     var todoObject = { name: String(todoItem), completed: false };
     if (todoObject == undefined || todoObject.name == undefined) {
-      console.log('I AM UNDEFINED');
+      console.log('todoObject UNDEFINED');
     }
 
-    console.log(`todo item FIRST ${todoItem}`);
-    console.log(`todo item NAME ${String(todoObject.name)}`);
+    console.log(`todo item Check1: ${todoItem}`);
+    console.log(`todo item Check2: ${String(todoObject.name)}`);
 
     if (todoObject !== undefined && todoObject.name !== undefined) {
       console.log(`todo item ${String(todoItem)}`);
