@@ -15,32 +15,29 @@ export default class App extends React.Component {
   }
 
   addToDoItem = (todoItem) => {
-    // // event.preventDefault();
-    // const newToDoList = {
-    //   name: todoItem,
-    //   id: Date.now(),
-    //   completed: false
-    // }
+    const newToDoList = {
+      name: todoItem,
+    completed: false
+    }
 
-    console.log('LOG 1');
     var todoObject = { name: String(todoItem), completed: false };
     if (todoObject == undefined || todoObject.name == undefined) {
       console.log('todoObject UNDEFINED');
     }
 
-    console.log(`todo item Check1: ${todoItem}`);
-    console.log(`todo item Check2: ${String(todoObject.name)}`);
+    // console.log(`todo item Check1: ${todoItem}`);
+    // console.log(`todo item Check2: ${String(todoObject.name)}`);
 
     if (todoObject !== undefined && todoObject.name !== undefined) {
-      console.log(`todo item ${String(todoItem)}`);
+      // console.log(`todo item ${String(todoItem)}`);
       this.postTask(String(todoObject.name));
-      console.log(`here is todotitem ${todoObject}`)
+      // console.log(`here is todoObject ${JSON.stringify(todoObject)}`)
     }
 
 
     axios.get(`http://localhost:9000/api/todos`)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         // var filtered = res.data.data.filter(task => task !== undefined);
         this.setState({
           ...this.state, todoList: [...res.data.data]
@@ -51,15 +48,16 @@ export default class App extends React.Component {
 
   }
 
-  clearCompleted = () => {
+  clearCompleted = (event) => {
+    event.preventDefault();
     for (let i = 0; i < this.state.todoList.length; i++) {
-      console.log(`Here is the TDL ${this.state.todoList[i]}`);
+      // console.log(`Here is the TDL (${JSON.stringify(this.state.todoList[i])}`);
       if (this.state.todoList[i] !== undefined && this.state.todoList[i].name !== undefined && this.state.todoList[i].completed == true) {
 
-        
+
         var todo = this.state.todoList[i].id;
         this.patchTask(todo);
-        console.log(`${todo} is completed and cleared.`)
+        // console.log(`${todo} is completed and cleared.`)
       }
     }
     this.setState({
@@ -74,20 +72,26 @@ export default class App extends React.Component {
     this.setState({
       ...this.state, todoList: this.state.todoList.map((toDoListItem) => {
         if (itemID === toDoListItem.id) {
-          console.log(`${toDoListItem.name} is completed: ${toDoListItem.completed}`)
+          // console.log(`${toDoListItem.name} is completed: ${toDoListItem.completed}`)
           return {
             ...toDoListItem, completed: !toDoListItem.completed
           }
         }
-        console.log(`${toDoListItem.name} is completed: ${toDoListItem.completed}`)
-        console.log(toDoListItem);
+        // console.log(`${toDoListItem.name} is completed: ${toDoListItem.completed}`)
+        // console.log(`todoListItem inside toggleItem Loop: ${JSON.stringify(toDoListItem)}`);
+        // console.log(`todoList inside toggleItem Loop: ${JSON.stringify(this.state.todoList)}`)
         return toDoListItem;
       })
     })
+    // console.log(`todoList outside toggleItem Loop: ${JSON.stringify(this.state.todoList)}`)
   }
 
   fetchTask = () => {
-    return axios.get(`http://localhost:9000/api/todos`).then(res => res).catch(err => console.error('error when fetching'))
+    return axios.get(`http://localhost:9000/api/todos`)
+      .then(res => {
+        this.setState({ ...this.state, todoItem: res.data.data })
+      })
+      .catch(err => console.error(`error when fetching - ${err}`))
   }
 
   postTask = (name) => {
@@ -97,7 +101,7 @@ export default class App extends React.Component {
   }
 
   patchTask = (id) => {
-    return axios.put(`http://localhost:9000/api/todos/${id}`).then(res => res).catch(err => console.error(`error when patching ${id}`))
+    return axios.put(`http://localhost:9000/api/todos/${id}`).then(res => res).catch(err => console.error(`error when patching ${id}:${err}`))
   }
 
   componentDidMount = (todoItem) => this.addToDoItem(todoItem);

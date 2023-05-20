@@ -15,7 +15,7 @@ export default class Form extends React.Component {
   submitForm = (event) => {
     event.preventDefault();
     console.log(`NEW LOG: ${this.state.todoItem}`)
-    this.props.addToDoItem(event, this.state.todoItem);
+    this.props.addToDoItem(String(this.state.todoItem));
     this.setState({
       ...this.state, todoItem: ''
     })
